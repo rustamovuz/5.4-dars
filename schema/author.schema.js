@@ -1,43 +1,51 @@
 const { Schema, model } = require("mongoose");
 
-const Author = new Schema({
+const AuthorSchema = new Schema({
   full_name: {
     type: String,
-    required: true
+    required: [true, "Muallif ismini kiritish majburiy!"],
+    trim: true
   },
   birth_year: {
-    type: Date,
-    required: true
+    type: Number,
+    required: [true, "Tug'ilgan yilini kiritish majburiy!"],
+    min: [0, "Yil manfiy bo'lishi mumkin emas"]
   },
   death_year: {
-    type: String,
-    required: true
+    type: Number, 
+    required: false,
+    validate: {
+      validator: function(value) {
+        
+        return !value || value >= this.birth_year;
+      },
+      message: "O'lim yili tug'ilgan yildan oldin bo'lishi mumkin emas!"
+    }
   },
   bio: {
     type: String,
-    required: true
+    required: [true, "Biografiyani kiritish majburiy!"]
   },
   period: {
     type: String,
-    required: true,
+    required: [true, "Davriylikni kiritish majburiy!"],
+    default: "Temuriylar davri",
     enum: {
       values: ["Temuriylar davri", "Jadid davri", "Sovet davri", "Mustaqillik davri"],
-      default: "Temuriylar davri",
-      message: "{Values} bunday qiymat ko'rsatilmagan"
+      message: "{VALUE} bunday davr ko'rsatilmagan"
     }
   },
   work: {
-    type: String,
-    required: true
+    type: String, 
+    required: [true, "Asarlarini kiritish majburiy!"]
   },
   region: {
     type: String,
-    required: true
+    required: [true, "Tug'ilgan hududini kiritish majburiy!"]
   }
 }, {
   versionKey: false,
   timestamps: true
-})
+});
 
-const AuthorSchema = model("Author", Author)
-module.exports = AuthorSchema
+module.exports = model("Author", AuthorSchema);
