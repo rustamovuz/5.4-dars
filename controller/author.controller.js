@@ -1,21 +1,17 @@
 const AuthorSchema = require("../schema/author.schema");
 
-const getAllAuthors = async (req, res) => {
+const getAllAuthors = async (req, res, next) => {
   try {
     const authors = await AuthorSchema.find();
-
     res.status(200).json(authors);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const addAuthor = async (req, res) => {
+const addAuthor = async (req, res, next) => {
   try {
-    const { full_name, birth_year, death_year, bio, period, work, region } =
-      req.body;
+    const { full_name, birth_year, death_year, bio, period, work, region } = req.body;
 
     await AuthorSchema.create({
       full_name,
@@ -31,16 +27,13 @@ const addAuthor = async (req, res) => {
       message: "Added new author",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const getOneAuthor = async (req, res) => {
+const getOneAuthor = async (req, res, next) => {
   try {
     const { id } = req.params;
-
     const foundedAuthor = await AuthorSchema.findById(id);
 
     if (!foundedAuthor) {
@@ -51,17 +44,14 @@ const getOneAuthor = async (req, res) => {
 
     res.status(200).json(foundedAuthor);
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const updateAuthor = async (req, res) => {
+const updateAuthor = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { full_name, birth_year, death_year, bio, period, work, region } =
-      req.body;
+    const { full_name, birth_year, death_year, bio, period, work, region } = req.body;
 
     const foundedAuthor = await AuthorSchema.findById(id);
 
@@ -81,17 +71,15 @@ const updateAuthor = async (req, res) => {
       region,
     });
 
-    res.status(404).json({
+    res.status(200).json({ 
       message: "Updated author",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error);
   }
 };
 
-const deleteAuthor = async (req, res) => {
+const deleteAuthor = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -103,15 +91,13 @@ const deleteAuthor = async (req, res) => {
       });
     }
 
-    await AuthorSchema.findByIdAndDelete({_id: id})
+    await AuthorSchema.findByIdAndDelete({_id: id});
 
-    res.status(404).json({
+    res.status(200).json({ 
       message: "Deleted author",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    next(error);
   }
 };
 
