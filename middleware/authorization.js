@@ -9,14 +9,7 @@ module.exports = function authorization(req, res, next) {
       throw CustomErrorHandler.BadRequest("Token not found");
     }
 
-    const bearer = token.split(" ")[0];
-    const partOfToken = token.split(" ")[1];
-
-    if(bearer !== "Bearer" || !partOfToken) {
-      throw CustomErrorHandler.BadRequest("Bearer not found");
-    }
-
-    const decode = jwt.verify(partOfToken, process.env.SECRET_KEY)
+    const decode = jwt.verify( token , process.env.SECRET_KEY)
 
     req.user = decode
 

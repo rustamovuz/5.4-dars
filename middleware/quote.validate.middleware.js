@@ -1,8 +1,7 @@
-const CustomErrorHandler = require("../error/error");
-const authValidator = require("../validator/auth.validator");
+const quoteValidator = require("../validator/quote.validator");
 
 module.exports = function (req, res, next) {
-  const { error } = authValidator(req.body);
+  const { error } = quoteValidator(req.body);
 
   if (error) {
     return res.status(400).json({
