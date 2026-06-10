@@ -24,6 +24,8 @@ app.use(express.urlencoded({
 connectDB();
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads/images")))
+logger.warn("Warn logger")
+
 //router
 
 app.use(authorRouter);
