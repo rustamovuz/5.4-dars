@@ -32,6 +32,7 @@ app.use(authorRouter);
 app.use(bookRouter);
 app.use(authRouter);
 app.use(citationRouter)
+app.use(likeRouter)
 app.use(errorMiddleware);
 
 app.listen(PORT, () => {
